@@ -1,2 +1,9 @@
 fastapi
 sqlalchemy
+python-jose
+python-dotenv
+uvicorn
+psycopg2
+requests
+psycopg2-binary
+pydantic-settings
