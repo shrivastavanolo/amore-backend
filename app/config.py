@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
 
+    BASE_API_URL: str
+    BASE_SITE_URL: str
+
     class Config:
         env_file = ".env"
 

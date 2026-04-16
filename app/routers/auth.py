@@ -20,7 +20,7 @@ def google_login():
             f"?client_id={settings.GOOGLE_CLIENT_ID}"
             "&response_type=code"
             "&scope=openid%20email%20profile"
-            "&redirect_uri=http://localhost:8000/auth/google/callback"
+            f"&redirect_uri={settings.BASE_API_URL}/auth/google/callback"
         )
     }
 
@@ -34,7 +34,7 @@ def google_callback(code: str, db: Session = Depends(get_db)):
             "client_secret": settings.GOOGLE_CLIENT_SECRET,
             "code": code,
             "grant_type": "authorization_code",
-            "redirect_uri": "http://localhost:8000/auth/google/callback",
+            "redirect_uri": f"{settings.BASE_API_URL}/auth/google/callback",
         },
     ).json()
 
@@ -58,5 +58,13 @@ def google_callback(code: str, db: Session = Depends(get_db)):
     access_token = create_access_token({"sub": str(user.id)})
 
     return RedirectResponse(
-        url=f"http://localhost:3000/auth/callback?token={access_token}"
+        url=f"{settings.BASE_SITE_URL}/auth/callback?token={access_token}"
     )
+
+@router.get("/me")
+def get_current_user_info(
+    db: Session = Depends(get_db),
+    current_user=None,
+):
+    """Alias handled by users router – see /users/me"""
+    raise HTTPException(status_code=307, headers={"Location": "/users/me"})
